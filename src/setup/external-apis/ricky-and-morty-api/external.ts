@@ -1,3 +1,9 @@
+import { ExternalItem } from "@/types/abstract";
+
+export type QueryNotFound  = {
+  error: string;
+} 
+
 export type CharacterData = {
   info: Info;
   results: CharacterEntity[];
@@ -10,7 +16,7 @@ export type Info = {
   prev: string | null;
 };
 
-export type CharacterEntity = {
+export interface CharacterEntity extends ExternalItem {
   id: number;
   name: string;
   status: "unknown" | "Alive" | "Dead";

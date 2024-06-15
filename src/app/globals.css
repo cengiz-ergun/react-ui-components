@@ -2,32 +2,180 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-} */
+:root {
+  /* colors start */
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+  --first-color: #525f72;
+  --second-color: #94a3b8;
+  --third-color: #e2e8f0;
+  --fourth-color: #f8fafc;
+
+  --text: var(--first-color);
+  --border: var(--second-color);
+  --bg-selected-items: var(--third-color);
+  --bg-items: var(--fourth-color);
+
+  /* colors finish */
+
+  /* ------------------------------------------- */
+
+  /* sizing start */
+
+  --w-input-container: 5rem;
+  --image-size: 55px;
+
+  /* sizing finish */
+}
+
+/* ------------------------------------------- */
+
+/* disable scrollbar start */
+
+.disable-scrollbar::-webkit-scrollbar {
+  background: transparent; /* Chrome/Safari/Webkit */
+  width: 0px;
+}
+
+.disable-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+/* disable scrollbar finish */
+
+/* ------------------------------------------- */
+
+/* override default scrollbar start */
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #8f8989;
+}
+
+/* override default scrollbar finish */
+
+/* ------------------------------------------- */
+
+/* other overrides start */
+
+input[type="checkbox"] {
+  min-width: 20px;
+  height: 20px;
+}
+
+.disable-outline {
+  outline: none;
+}
+
+/* other overrides finish */
+
+/* ------------------------------------------- */
+
+/* data loader spinner start - used when scrolling */ 
+
+.loader {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #000000;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-} */
+/* data loader spinner finish - used when scrolling */ 
 
-/* @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+/* ------------------------------------------- */
+
+/* data loader dots start - used when filtering */ 
+/* https://loading.io/css/ */
+
+.lds-ellipsis,
+.lds-ellipsis div {
+  box-sizing: border-box;
+}
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33.33333px;
+  width: 13.33333px;
+  height: 13.33333px;
+  border-radius: 50%;
+  background: white;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
   }
-} */
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+/* data loader dots finish - used when filtering */ 
+
+/* ------------------------------------------- */
+
+

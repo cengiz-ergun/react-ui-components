@@ -1,25 +1,43 @@
 import {
-  AppCharacterEntity,
-  MappedApiResponseWithDetail,
+  AppItem,
+  AppErrorApiResponse,
+  AppSuccessApiResponse,
   NextPageUri,
 } from "@/types/application";
 import { createStore } from "zustand/vanilla";
 import { devtools } from "zustand/middleware";
+import { ApiDetailsRegistryBookForStore } from "@/types/abstract";
+import { availableApiDetailsNames } from "@/setup/multi-select-starter";
 
 export type SelectorState = {
-  allItems: AppCharacterEntity[];
-  filteredItemsIds: number[];
-  selectedItemsIds: number[];
+  apiDetailsRegistryBookForStore: ApiDetailsRegistryBookForStore;
+  activeApiDetailsName: availableApiDetailsNames;
+
+  allItems: AppItem[];
+  selectedItems: AppItem[];
   searchedWord: string;
+  cachedNotFoundWords: string[];
+  apiResponseErrorState: AppErrorApiResponse;
+  isItemFilterByNameApiRequestActive: boolean;
+
+  isComponentOpen: boolean;
 
   nextPageUri: string | null;
 };
 
 export type SelectorActions = {
-  setItems: (items: AppCharacterEntity[]) => void;
-  filterItemsIds: (input: string) => void;
-  addToSelectedItems: (id: number) => void;
+  setItems: (items: AppItem[]) => void; // set data with old data
+  setItemsOnFiltering: (items: AppItem[]) => void; // set new data
+  addToSelectedItems: (item: AppItem) => void;
   removeFromSelectedItems: (id: number) => void;
+  setSearchedWord: (word: string) => void;
+  addToCachedNotFoundWords: (word: string) => void;
+  removeFromCachedNotFoundWords: (word: string) => void;
+  setApiResponseErrorState: ({ status, message }: AppErrorApiResponse) => void;
+  refreshApiResponseErrorState: () => void;
+  setIsItemFilterByNameApiRequestActive: (sw: boolean) => void;
+
+  setIsComponentOpen: (sw: boolean) => void;
 
   setNextPageUri: (nextPageUri: NextPageUri) => void;
 };
@@ -27,13 +45,22 @@ export type SelectorActions = {
 export type SelectorStore = SelectorState & SelectorActions;
 
 export const initSelectorStoreWithData = (
-  initial: MappedApiResponseWithDetail<AppCharacterEntity>
+  initial: AppSuccessApiResponse,
+  activeApiDetailsName: availableApiDetailsNames,
+  apiDetailsRegistryBookForStore: ApiDetailsRegistryBookForStore
 ): SelectorState => {
   return {
+    apiDetailsRegistryBookForStore: apiDetailsRegistryBookForStore,
+    activeApiDetailsName: activeApiDetailsName,
+
     allItems: [...initial.data],
-    filteredItemsIds: [],
-    selectedItemsIds: [],
+    selectedItems: [],
     searchedWord: "",
+    cachedNotFoundWords: [],
+    apiResponseErrorState: { status: 0, message: "" },
+    isItemFilterByNameApiRequestActive: false,
+
+    isComponentOpen: true,
 
     nextPageUri: initial.nextPageUri,
   };
@@ -45,35 +72,65 @@ export const createSelectorStore = (initState: SelectorState) => {
       // persist(
       (set) => ({
         ...initState,
-        setItems: (items: AppCharacterEntity[]) => {
-          set((state) => ({ allItems: [...state.allItems, ...items] }))         
+        setItems: (items: AppItem[]) => {
+          set((state) => ({ allItems: [...state.allItems, ...items] }));
         },
-        filterItemsIds: (input: string) => {
-          set((state) => ({
-            searchedWord: input.toUpperCase(),
-            filteredItemsIds: (() => {
-              return input.length !== 0
-                ? [
-                    ...state.allItems
-                      .filter((ace) =>
-                        ace.name.toUpperCase().includes(input.toUpperCase())
-                      )
-                      .map((ace) => ace.id),
-                  ]
-                : [];
-            })(),
-          }));
+        setItemsOnFiltering: (items: AppItem[]) => {
+          set((state) => ({ allItems: [...items] }));
         },
-        addToSelectedItems: (id: number) => {
+        addToSelectedItems: (item: AppItem) => {
           set((state) => ({
-            selectedItemsIds: [...state.selectedItemsIds, id],
+            selectedItems: [...state.selectedItems, item],
           }));
         },
         removeFromSelectedItems: (id: number) => {
           set((state) => ({
-            selectedItemsIds: [
-              ...state.selectedItemsIds.filter((siId) => siId !== id),
+            selectedItems: [
+              ...state.selectedItems.filter((si) => si.id !== id),
             ],
+          }));
+        },
+        setSearchedWord: (word: string) => {
+          set((state) => ({
+            searchedWord: word,
+          }));
+        },
+        addToCachedNotFoundWords: (word: string) => {
+          set((state) => ({
+            cachedNotFoundWords: [...state.cachedNotFoundWords, word],
+          }));
+        },
+        removeFromCachedNotFoundWords: (word: string) => {
+          set((state) => ({
+            cachedNotFoundWords: [
+              ...state.cachedNotFoundWords.filter((w) => w !== word),
+            ],
+          }));
+        },
+        setApiResponseErrorState: (res: AppErrorApiResponse) => {
+          set((state) => ({
+            apiResponseErrorState: {
+              status: res.status,
+              message: res.message,
+            },
+          }));
+        },
+        refreshApiResponseErrorState: () => {
+          set((state) => ({
+            apiResponseErrorState: {
+              status: 0,
+              message: "",
+            },
+          }));
+        },
+        setIsItemFilterByNameApiRequestActive: (sw: boolean) => {
+          set((state) => ({
+            isItemFilterByNameApiRequestActive: sw,
+          }));
+        },
+        setIsComponentOpen: (sw: boolean) => {
+          set((state) => ({
+            isComponentOpen: sw,
           }));
         },
         setNextPageUri: (nextPageUri: NextPageUri) => {

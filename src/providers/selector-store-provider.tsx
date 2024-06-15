@@ -8,11 +8,10 @@ import {
   createSelectorStore,
   initSelectorStoreWithData,
 } from "@/stores/selector-store";
-import {
-  AppCharacterEntity,
-  MappedApiResponseWithDetail,
-} from "@/types/application";
+import { AppSuccessApiResponse } from "@/types/application";
 import { useStoreWithEqualityFn } from "zustand/traditional";
+import { ApiDetailsRegistryBookForStore } from "@/types/abstract";
+import { availableApiDetailsNames } from "@/setup/multi-select-starter";
 
 export type SelectorStoreApi = ReturnType<typeof createSelectorStore>;
 
@@ -22,17 +21,25 @@ export const SelectorStoreContext = createContext<SelectorStoreApi | undefined>(
 
 export interface SelectorStoreProviderProps {
   children: ReactNode;
-  data: MappedApiResponseWithDetail<AppCharacterEntity>;
+  data: AppSuccessApiResponse;
+  activeApiDetailsName: availableApiDetailsNames;
+  apiDetailsRegistryBookForStore: ApiDetailsRegistryBookForStore;
 }
 
 export const SelectorStoreProvider = ({
   children,
   data,
+  activeApiDetailsName,
+  apiDetailsRegistryBookForStore,
 }: SelectorStoreProviderProps) => {
   const storeRef = useRef<SelectorStoreApi>();
   if (!storeRef.current) {
     storeRef.current = createSelectorStore(
-      initSelectorStoreWithData(data)
+      initSelectorStoreWithData(
+        data,
+        activeApiDetailsName,
+        apiDetailsRegistryBookForStore
+      )
     );
   }
 

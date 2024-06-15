@@ -1,16 +1,23 @@
-import { MultiSelectComponent } from "@/components/multi-select/ui/MultiSelectComponent";
+import { MultiSelect } from "@/components/MultiSelect/MultiSelect";
 import { SelectorStoreProvider } from "@/providers/selector-store-provider";
-import { AppCharacterEntity, MappedApiResponseWithDetail } from "@/types/application";
+import { availableApiDetailsNames } from "@/setup/multi-select-starter";
+import { ApiDetailsRegistryBookForStore } from "@/types/abstract";
+import { AppSuccessApiResponse } from "@/types/application";
 import { render } from "@testing-library/react";
 
 export const renderMultiSelectComponentWithProvider = (
-  data: MappedApiResponseWithDetail<AppCharacterEntity>
+  data: AppSuccessApiResponse,
+  bookForStore: ApiDetailsRegistryBookForStore,
+  apiDetailsName: availableApiDetailsNames
 ) => {
   return render(
-    <SelectorStoreProvider data={data}>
+    <SelectorStoreProvider
+      data={data}
+      apiDetailsRegistryBookForStore={bookForStore}
+      activeApiDetailsName={apiDetailsName}
+    >
       <>
-        <h1>Main Page</h1>
-        <MultiSelectComponent />
+        <MultiSelect />
       </>
     </SelectorStoreProvider>
   );

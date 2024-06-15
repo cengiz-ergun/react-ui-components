@@ -1,13 +1,23 @@
-export type MappedApiResponseWithDetail<T> = {
-  data: T[];
+export type AppSuccessApiResponse = {
+  data: AppItem[];
   nextPageUri: NextPageUri;
+};
+
+export type AppItem = {
+  id: number;
+  image: string;
+  text: string;
+  detail: string;
 };
 
 export type NextPageUri = string | null; // null when last pagination
 
-export type AppCharacterEntity = {
-  id: number;
-  name: string;
-  image: string;
-  episodeCount: number;
+export type AppErrorApiResponse = {
+  message: string;
+  status: number;
 };
+
+// -----------------------
+
+
+export type AnimationStyle = "lds-ellipsis" 

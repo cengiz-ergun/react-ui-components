@@ -1,4 +1,5 @@
 import { useSelectorStore } from "@/providers/selector-store-provider";
+import { AppItem } from "@/types/application";
 
 export const useCheckboxHandler = () => {
   const [addToSelectedItems, removeFromSelectedItems] = useSelectorStore(
@@ -6,9 +7,9 @@ export const useCheckboxHandler = () => {
   );
   const checkboxHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
-    id: number
+    item: AppItem
   ) => {
-    event.target.checked ? addToSelectedItems(id) : removeFromSelectedItems(id);
+    event.target.checked ? addToSelectedItems(item) : removeFromSelectedItems(item.id);
   };
   return { checkboxHandler };
 };

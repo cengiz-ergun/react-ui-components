@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "ES6",
     "typeRoots": ["node_modules/@types"],
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -28,7 +29,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/__mocks__/handlers.js",
-    "src/__mocks__/character.ts"
+    "src/__mocks__/character.ts",
+    "src/lib/word-slicer/wordSlicer.ts",
+    "src/lib/error/CustomError.js"
   ],
   "exclude": ["node_modules"]
 }

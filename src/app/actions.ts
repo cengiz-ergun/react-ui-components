@@ -1,16 +1,23 @@
 "use server";
 
-import { getCharactersService } from "@/services/app-service";
 import {
-  AppCharacterEntity,
-  MappedApiResponseWithDetail,
+  MultiSelectStarter,
+  availableApiDetailsNames,
+} from "@/setup/multi-select-starter";
+import { getItemsService } from "@/services/app-service";
+import {
+  AppErrorApiResponse,
+  AppSuccessApiResponse,
 } from "@/types/application";
 
-export const getCharactersOnDemand = async (
+export const GetItemsAction = async (
+  apiDetailName: availableApiDetailsNames,
   uri: string
-): Promise<MappedApiResponseWithDetail<AppCharacterEntity>> => {
+): Promise<AppSuccessApiResponse | AppErrorApiResponse> => {
   try {
-    const result = await getCharactersService(uri);
+    const multiSelectStarter = MultiSelectStarter.instance;
+    const apiDetails = multiSelectStarter.getApiDetails(apiDetailName);
+    const result = await getItemsService(apiDetails, uri);
     return result;
   } catch (error: unknown) {
     console.error(error);
