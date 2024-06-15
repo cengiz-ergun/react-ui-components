@@ -48,7 +48,7 @@ export const SelectedItem: React.FC<SelectedItemProps> = ({
   );
 };
 
-export const TextProcessor = (props: {
+const TextProcessor = (props: {
   text: string;
   maxAllowedLength: number;
 }) => {

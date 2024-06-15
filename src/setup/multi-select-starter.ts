@@ -11,7 +11,7 @@ import { ApiDetails } from "@/types/api-details";
 
 export type availableApiDetailsNames = typeof mortyApi | typeof mockApi
 
-// Singleton
+// Singleton. Because same instance has to be used by "/app/actions.ts" and "/app/page.tsx"
 export class MultiSelectStarter {
   static #instance: MultiSelectStarter;
 
