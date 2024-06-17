@@ -9,11 +9,7 @@ export const getItemsService = async (
   optionalUri: string = "" // optionalUri parameter is will be used by on-demand call(server action)
 ): Promise<AppSuccessApiResponse | AppErrorApiResponse> => {
   const { jsonResponse, status } = await httpGet(apiDetails, 5, optionalUri);
-  const mappedAppResponse = apiDetails.responseMapper.mapToAppResponse(
-    jsonResponse,
-    status,
-    apiDetails.itemMapper
-  );
+  const mappedAppResponse = apiDetails.mapToAppResponse(jsonResponse, status);
 
   return mappedAppResponse;
 };

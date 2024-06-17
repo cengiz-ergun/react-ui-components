@@ -17,17 +17,6 @@ import {
 import userEvent from "@testing-library/user-event";
 
 describe("ViewItem Component", () => {
-  beforeEach(() => {
-    // IntersectionObserver isn't available in test environment
-    const mockIntersectionObserver = jest.fn();
-    mockIntersectionObserver.mockReturnValue({
-      observe: () => null,
-      unobserve: () => null,
-      disconnect: () => null,
-    });
-    window.IntersectionObserver = mockIntersectionObserver;
-  });
-
   beforeEach(async () => {
     nock(mockBaseUrl).get(mockEndpoint).reply(200, mockFirstPage);
 

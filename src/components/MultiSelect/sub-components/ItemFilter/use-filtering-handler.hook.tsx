@@ -53,7 +53,7 @@ export const useFilteringHandler = () => {
     const uri =
       apiDetailForStore.baseUrl +
       apiDetailForStore.endpoint +
-      queryParemeters.queryWithName(1, input); // because page number should be 1 after each filtering
+      queryParemeters.queryWithName(1, input, activeApiDetailsName); // because page number should be 1 after each filtering
 
     refreshApiResponseErrorState();
     setIsItemFilterByNameApiRequestActive(true);

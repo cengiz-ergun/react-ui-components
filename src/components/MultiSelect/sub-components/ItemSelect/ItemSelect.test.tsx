@@ -13,17 +13,6 @@ import { screen } from "@testing-library/react";
 import { ItemsContainer } from "@/helper/test/test-id-constants";
 
 describe("Multiselect component", () => {
-  beforeEach(() => {
-    // IntersectionObserver isn't available in test environment
-    const mockIntersectionObserver = jest.fn();
-    mockIntersectionObserver.mockReturnValue({
-      observe: () => null,
-      unobserve: () => null,
-      disconnect: () => null,
-    });
-    window.IntersectionObserver = mockIntersectionObserver;
-  });
-
   test("Render ItemSelect component", async () => {
     nock(mockBaseUrl).get(mockEndpoint).reply(200, mockFirstPage);
 

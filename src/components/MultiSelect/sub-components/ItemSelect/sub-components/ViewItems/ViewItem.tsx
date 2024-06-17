@@ -2,6 +2,8 @@ import Image from "next/image";
 import { BoldMaker } from "@/lib/utility-components/BoldMaker/BoldMaker";
 import { AppItem } from "@/types/application";
 import { useState } from "react";
+import { useSelectorStore } from "@/providers/selector-store-provider";
+import { ApiDetailsTypeForStore } from "@/types/abstract";
 
 type ViewItemProps = {
   appItem: AppItem;
@@ -21,6 +23,14 @@ export const ViewItem = ({
   selectedItems,
   checkboxHandler,
 }: ViewItemProps) => {
+  const [activeApiDetailsName, apiDetailsRegistryBookForStore] =
+    useSelectorStore((state) => [
+      state.activeApiDetailsName,
+      state.apiDetailsRegistryBookForStore,
+    ]);
+
+  const apiDetailForStore: ApiDetailsTypeForStore =
+    apiDetailsRegistryBookForStore[activeApiDetailsName];
   const [loading, setIsLoading] = useState(true);
   const overlay = loading;
   return (
@@ -34,27 +44,30 @@ export const ViewItem = ({
         id={String(appItem.id)}
         type="checkbox"
         onChange={(event) => checkboxHandler(event, appItem)}
-        checked={selectedItems
-          .map((si) => si.id)
-          .includes(appItem.id)}
+        checked={selectedItems.map((si) => si.id).includes(appItem.id)}
       ></input>
-      <div className="min-w-[var(--image-size)] h-[var(--image-size)] relative">
-        {overlay && <Overlay />}
-        <Image
-          src={appItem.image}
-          alt={appItem.text}
-          width={55}
-          height={55}
-          className={`rounded-xl`}
-          onLoad={() => setIsLoading(false)}
-        />
-      </div>
+
+      {appItem.image && (
+        <div className="min-w-[var(--image-size)] h-[var(--image-size)] relative">
+          {overlay && <Overlay />}
+          <Image
+            src={appItem.image}
+            alt={appItem.text}
+            width={55}
+            height={55}
+            className={`rounded-xl`}
+            onLoad={() => setIsLoading(false)}
+          />
+        </div>
+      )}
 
       <div className="flex flex-col">
         <p className="font-normal">
           <BoldMaker appItem={appItem} />
         </p>
-        <p>{appItem.detail} Episodes</p>
+        <p>
+          {appItem.detail} {apiDetailForStore.detailString}
+        </p>
       </div>
     </div>
   );

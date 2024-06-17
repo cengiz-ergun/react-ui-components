@@ -5,7 +5,7 @@ export type AppSuccessApiResponse = {
 
 export type AppItem = {
   id: number;
-  image: string;
+  image?: string;
   text: string;
   detail: string;
 };

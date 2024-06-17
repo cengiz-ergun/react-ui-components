@@ -1,3 +1,4 @@
+import { availableApiDetailsNames } from "@/setup/multi-select-starter";
 import {
   AppErrorApiResponse,
   AppItem,
@@ -6,30 +7,23 @@ import {
 
 export interface ExternalItem {}
 
-export interface ItemMapper {
-  mapToAppItem: (externalItem: ExternalItem) => AppItem;
-}
-
-export interface ResponseMapper {
-  mapToAppResponse: (
-    jsonResponse: any,
-    status: number,
-    map: ItemMapper
-  ) => AppSuccessApiResponse | AppErrorApiResponse;
-}
-
 export type ApiDetailsType = {
-  name: string;
+  name: availableApiDetailsNames;
   baseUrl: string;
   endpoint: string;
-  itemMapper: ItemMapper;
-  responseMapper: ResponseMapper;
+  detailString: string;
+  mapToAppItem(externalItem: ExternalItem): AppItem;
+  mapToAppResponse(
+    jsonResponse: any,
+    status: number
+  ): AppSuccessApiResponse | AppErrorApiResponse;
 };
 
 export type ApiDetailsTypeForStore = {
-  name: string;
+  name: availableApiDetailsNames;
   baseUrl: string;
   endpoint: string;
+  detailString: string;
 };
 
 export type ApiDetailsRegistryBook = {

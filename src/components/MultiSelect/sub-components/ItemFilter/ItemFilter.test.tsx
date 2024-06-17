@@ -18,17 +18,6 @@ import { FilterInput, ItemsContainer, NotFoundMessage } from "@/helper/test/test
 
 describe("ItemFilter component", () => {
   beforeEach(async () => {
-    // IntersectionObserver isn't available in test environment
-    const mockIntersectionObserver = jest.fn();
-    mockIntersectionObserver.mockReturnValue({
-      observe: () => null,
-      unobserve: () => null,
-      disconnect: () => null,
-    });
-    window.IntersectionObserver = mockIntersectionObserver;
-  });
-
-  beforeEach(async () => {
     nock(mockBaseUrl).get(mockEndpoint).reply(200, mockFirstPage);
 
     const multiSelectStarter = MultiSelectStarter.instance;
@@ -42,7 +31,7 @@ describe("ItemFilter component", () => {
 
   it("Filter 'x'", async () => {
     nock(mockBaseUrl)
-      .get(mockEndpoint + queryParemeters.queryWithName(1, "x"))
+      .get(mockEndpoint + queryParemeters.queryWithName(1, "x", mockApi))
       .reply(404, mockNotFound);
 
     await waitFor(() => userEvent.type(screen.getByTestId(FilterInput), "x"));
@@ -58,7 +47,7 @@ describe("ItemFilter component", () => {
     const input = "L";
     const data = mockFilterApi(input);
     nock(mockBaseUrl)
-      .get(mockEndpoint + queryParemeters.queryWithName(1, input))
+      .get(mockEndpoint + queryParemeters.queryWithName(1, input, mockApi))
       .reply(200, data);
 
     await waitFor(() => userEvent.type(screen.getByTestId(FilterInput), input));

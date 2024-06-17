@@ -3,13 +3,20 @@ import {
   ApiDetailsRegistryBook,
   ApiDetailsRegistryBookForStore,
 } from "../types/abstract";
+import { ApiDetails } from "@/types/api-details";
 import {
   mortyApi,
   mortyApiDetails,
-} from "./external-apis/ricky-and-morty-api/configuration";
-import { ApiDetails } from "@/types/api-details";
+} from "./external-apis/ricky-and-morty/characters-api/configuration";
+import {
+  starWarsCharactersApi,
+  starWarsCharactersApiDetails,
+} from "./external-apis/star-wars/characters-api/new-configuration";
 
-export type availableApiDetailsNames = typeof mortyApi | typeof mockApi
+export type availableApiDetailsNames =
+  | typeof mortyApi
+  | typeof mockApi
+  | typeof starWarsCharactersApi;
 
 // Singleton. Because same instance has to be used by "/app/actions.ts" and "/app/page.tsx"
 export class MultiSelectStarter {
@@ -31,7 +38,8 @@ export class MultiSelectStarter {
 
   private start() {
     this.registerApiDetails(mortyApiDetails);
-    this.registerApiDetails(mockApiDetails)
+    this.registerApiDetails(mockApiDetails);
+    this.registerApiDetails(starWarsCharactersApiDetails);
   }
 
   private registerApiDetails(apiDetails: ApiDetails) {
@@ -40,6 +48,7 @@ export class MultiSelectStarter {
       name: apiDetails.name,
       baseUrl: apiDetails.baseUrl,
       endpoint: apiDetails.endpoint,
+      detailString: apiDetails.detailString,
     };
   }
 

@@ -3,7 +3,11 @@ import { useLoadMoreData } from "./use-load-more-data.hook";
 import React, { ReactNode } from "react";
 import ViewItems from "./sub-components/ViewItems/ViewItems";
 import { AnimatedOverlay } from "@/lib/utility-components/Overlay/AnimatedOverlay";
-import { ItemsContainer, NotFoundMessage } from "@/helper/test/test-id-constants";
+import {
+  ItemsContainer,
+  NotFoundMessage,
+} from "@/helper/test/test-id-constants";
+import { DefaultNotFoundMessage } from "@/constants";
 
 export const ItemSelect = () => {
   const [allItems, apiResponseErrorState, isItemFilterByNameApiRequestActive] =
@@ -34,7 +38,7 @@ export const ItemSelect = () => {
           </>
         ) : (
           <ItemNotFoundWrapper>
-            {apiResponseErrorState.message}
+            {apiResponseErrorState.message || DefaultNotFoundMessage}
           </ItemNotFoundWrapper>
         )}
       </div>

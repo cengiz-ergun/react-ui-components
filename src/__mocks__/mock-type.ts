@@ -1,9 +1,13 @@
 // external mock types
 
-import { ExternalItem, ItemMapper, ResponseMapper } from "@/types/abstract";
-import { ApiDetailsBuilder } from "@/types/api-details-builder";
+import { ExternalItem } from "@/types/abstract";
 import { mockBaseUrl, mockEndpoint } from "./mock-data";
-import { AppErrorApiResponse, AppItem } from "@/types/application";
+import {
+  AppErrorApiResponse,
+  AppItem,
+  AppSuccessApiResponse,
+} from "@/types/application";
+import { ApiDetails } from "@/types/api-details";
 
 type MockData = {
   info: Info;
@@ -29,8 +33,8 @@ export type QueryNotFound = {
 
 // configuration
 
-const mockItemMapper: ItemMapper = {
-  mapToAppItem: function (externalItem: ExternalItem): AppItem {
+export class MockApiDetails extends ApiDetails {
+  mapToAppItem(externalItem: ExternalItem): AppItem {
     const { id, name, logoUrl, songCount } = externalItem as MockEntity;
     const item: AppItem = {
       id: id,
@@ -39,14 +43,14 @@ const mockItemMapper: ItemMapper = {
       detail: songCount.toString(),
     };
     return item;
-  },
-};
-
-const mockResponseMapper: ResponseMapper = {
-  mapToAppResponse(jsonResponse, status, itemMapper) {
+  }
+  mapToAppResponse(
+    jsonResponse: any,
+    status: number
+  ): AppSuccessApiResponse | AppErrorApiResponse {
     if ((<MockData>jsonResponse).info) {
       const appItems: AppItem[] = (<MockData>jsonResponse).rockBands.map((ce) =>
-        itemMapper.mapToAppItem(ce)
+        this.mapToAppItem(ce)
       );
       return {
         data: appItems,
@@ -61,14 +65,14 @@ const mockResponseMapper: ResponseMapper = {
     } else {
       throw Error("Not Implemented");
     }
-  },
-};
+  }
+}
 
 export const mockApi = "mockApi";
 
-export const mockApiDetails = new ApiDetailsBuilder(mockApi)
-  .setBaseUrl(mockBaseUrl)
-  .setEndpoint(mockEndpoint)
-  .setItemMapper(mockItemMapper)
-  .setResponseMapper(mockResponseMapper)
-  .build();
+export const mockApiDetails = new MockApiDetails(
+  mockApi,
+  mockBaseUrl,
+  mockEndpoint,
+  "Mocks"
+);
